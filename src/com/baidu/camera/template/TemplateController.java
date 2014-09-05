@@ -8,7 +8,6 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.baidu.camera.template.gdx.GdxApp;
 import com.baidu.camera.template.gdx.TemplateSceneController;
-import com.baidu.camera.template.gdx.TemplateSceneControllerImpl;
 import com.baidu.camera.template.module.ElementGroup;
 import com.baidu.camera.template.module.TemplateElement;
 import com.baidu.camera.template.module.TemplateScene;
@@ -27,13 +26,11 @@ public class TemplateController implements TemplateModule , GdxApp.GdxListener {
     private static TemplateController instance;
     private boolean isGdxCreated = false;
     private TemplateScene mCurrTemplate;
-    private final TemplateSceneController mTemplateSceneController;
 
     private TemplateController(AndroidApplication application, ViewGroup viewParent) {
         mAndroidApplication = application;
         mViewParent = viewParent;
         initGdx();
-        mTemplateSceneController = TemplateSceneControllerImpl.getInstance();
     }
 
     public static TemplateController getInstance(AndroidApplication application, ViewGroup viewParent) {
@@ -79,11 +76,6 @@ public class TemplateController implements TemplateModule , GdxApp.GdxListener {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return false;
-    }
-
-    @Override
     public ApplicationAdapter getApplicationAdapter() {
         return mGdxApp;
     }
@@ -112,13 +104,5 @@ public class TemplateController implements TemplateModule , GdxApp.GdxListener {
         if (mCurrTemplate != null) {
             mGdxApp.setTemplate(mCurrTemplate);
         }
-    }
-
-    public void next() {
-        mTemplateSceneController.goNext();
-    }
-
-    public void pre() {
-        mTemplateSceneController.goPre();
     }
 }

@@ -9,9 +9,6 @@ import com.baidu.camera.template.module.TemplateScene;
  */
 public class ActorManager implements GdxApp.SceneListener {
     private static ActorManager instance;
-
-    private int zIndex;
-
     private ActorManager(){}
 
     public static ActorManager getInstance() {
@@ -24,12 +21,15 @@ public class ActorManager implements GdxApp.SceneListener {
     public Actor getActor(TemplateElement element) {
         ElementActor elementActor = new ElementActor(element);
         elementActor.setActorChangeListener(element);
-        elementActor.setZIndex(++zIndex);
+        if (element.getzIndex() == -1) {
+            elementActor.setZIndex(0);
+        } else {
+            elementActor.setZIndex(element.getzIndex());
+        }
         return elementActor;
     }
 
     @Override
     public void onSceneChange(TemplateScene scene) {
-        zIndex = 0;
     }
 }

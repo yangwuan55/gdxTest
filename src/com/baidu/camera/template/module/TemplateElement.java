@@ -42,7 +42,7 @@ public class TemplateElement implements RenderAble,ElementActor.ActorChangeListe
 
     private float alpha = DEFULT_ALPHA;
 
-    private int zOder;
+    private int zIndex;
 
     private String unKnow;
 
@@ -137,12 +137,12 @@ public class TemplateElement implements RenderAble,ElementActor.ActorChangeListe
         this.rotation = rotation;
     }
 
-    public int getzOder() {
-        return zOder;
+    public int getzIndex() {
+        return zIndex;
     }
 
-    public void setzOder(int zOder) {
-        this.zOder = zOder;
+    public void setzIndex(int zIndex) {
+        this.zIndex = zIndex;
     }
 
     public SceneElement getSceneElement() {
@@ -172,7 +172,7 @@ public class TemplateElement implements RenderAble,ElementActor.ActorChangeListe
         setScale(sceneElement.getElementScale());
         setRotation(sceneElement.getRotation());
         setAlpha(sceneElement.getAlpha());
-        setzOder(sceneElement.getzOder());
+        setzIndex(sceneElement.getzOder());
         setUnKnow(sceneElement.getUnKnow());
     }
 
@@ -183,7 +183,7 @@ public class TemplateElement implements RenderAble,ElementActor.ActorChangeListe
         setScale(element.getScale());
         setRotation(element.getRotation());
         setAlpha(element.getAlpha());
-        setzOder(element.getzOder());
+        setzIndex(element.getzIndex());
         setUnKnow(element.getUnKnow());
     }
 }

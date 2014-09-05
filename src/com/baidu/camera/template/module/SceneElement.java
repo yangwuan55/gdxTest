@@ -51,7 +51,7 @@ public class SceneElement {
         elementScale = element.getScale();
         rotation = element.getRotation();
         alpha = element.getAlpha();
-        zOder = element.getzOder();
+        zOder = element.getzIndex();
         unKnow = element.getUnKnow();
     }
 

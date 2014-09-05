@@ -29,21 +29,9 @@ public class GdxActivity extends AndroidApplication {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gdx_layout);
-        addTest(TemplateSceneManager.getInstance(),TemplateElemeteManager.getInstance(),SceneElementManager.getInstance());
+        //addTest(TemplateSceneManager.getInstance(),TemplateElemeteManager.getInstance(),SceneElementManager.getInstance());
         mTemplateController = TemplateController.getInstance(this, (android.view.ViewGroup) findViewById(R.id.gdx_layout));
         mTemplateController.open();
-        findViewById(R.id.pre).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTemplateController.pre();
-            }
-        });
-        findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTemplateController.next();
-            }
-        });
     }
 
     private void addTest(TemplateSceneManager templateSceneDaoManager, TemplateElemeteManager templateElemeteManager, SceneElementManager sceneElementManager) {

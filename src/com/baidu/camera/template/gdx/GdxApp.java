@@ -2,9 +2,7 @@ package com.baidu.camera.template.gdx;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.baidu.camera.template.module.TemplateScene;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -23,7 +21,7 @@ public class GdxApp extends ApplicationAdapter {
     private List<WeakReference<SceneListener>> mSceneListeners = new ArrayList<WeakReference<SceneListener>>();
     private TemplateScene mTemplateScene;
     private GdxListener mGdxListener;
-    private TemplateSceneControllerImpl mSceneController;
+    private TemplateSceneController mSceneController;
 
     public GdxApp(GdxListener gdxListener) {
         super();
@@ -34,7 +32,7 @@ public class GdxApp extends ApplicationAdapter {
     public void create() {
         super.create();
         mStage = new TemplateStage();
-        mSceneController = (TemplateSceneControllerImpl) TemplateSceneControllerImpl.getInstance();
+        mSceneController = TemplateSceneController.getInstance();
         Gdx.input.setInputProcessor(mSceneController);
         mGdxListener.onGdxCreate();
         mSceneController.initTemplates();
@@ -48,7 +46,7 @@ public class GdxApp extends ApplicationAdapter {
                 sceneListener.onSceneChange(templateScene);
             }
         };
-        mTemplateRenderer = new TemplateRendererImpl(mStage,mTemplateScene);
+        mSceneController.setTemplateScene(mTemplateScene);
     }
 
     @Override
