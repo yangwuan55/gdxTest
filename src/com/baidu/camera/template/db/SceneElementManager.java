@@ -1,14 +1,13 @@
 package com.baidu.camera.template.db;
 
 import android.util.Log;
-import com.baidu.camera.template.module.ElimentGroup;
+import com.baidu.camera.template.module.ElementGroup;
 import com.baidu.camera.template.module.SceneElement;
 import com.baidu.camera.template.module.TemplateElement;
 import com.baidu.camera.template.module.TemplateScene;
 import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -38,8 +37,8 @@ public class SceneElementManager extends DaoManagerImpl<SceneElement> {
         return result;
     }
 
-    public ElimentGroup findElementByScene(TemplateScene scene) throws SQLException {
-        ElimentGroup result = new ElimentGroup();
+    public ElementGroup findElementByScene(TemplateScene scene) throws SQLException {
+        ElementGroup result = new ElementGroup();
         List<SceneElement> sceneElementByScene = findSceneElementByScene(scene);
         if (sceneElementByScene != null && sceneElementByScene.size() > 0)
         for (SceneElement sceneElement : sceneElementByScene) {
@@ -56,9 +55,9 @@ public class SceneElementManager extends DaoManagerImpl<SceneElement> {
     }
 
     public void updateByScene(TemplateScene scene) throws SQLException {
-        ElimentGroup oldElement = findElementByScene(scene);
+        ElementGroup oldElement = findElementByScene(scene);
         ListIterator<TemplateElement> elementListIterator = oldElement.listIterator();
-        ElimentGroup newElements = scene.getElements();
+        ElementGroup newElements = scene.getElements();
         ListIterator<TemplateElement> newElementListIterator = newElements.listIterator();
 
         while (elementListIterator.hasNext() || newElementListIterator.hasNext()) {

@@ -6,12 +6,17 @@ import android.view.ViewGroup;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.baidu.camera.template.gdx.GdxApp;
+import com.baidu.camera.template.gdx.TemplateSceneController;
+import com.baidu.camera.template.gdx.TemplateSceneControllerImpl;
+import com.baidu.camera.template.module.ElementGroup;
+import com.baidu.camera.template.module.TemplateElement;
 import com.baidu.camera.template.module.TemplateScene;
 
 /**
  * Created by yangmengrong on 14-8-27.
  */
-public class TemplateController implements TemplateModule {
+public class TemplateController implements TemplateModule , GdxApp.GdxListener {
     private AndroidApplication mAndroidApplication;
     private ViewGroup mViewParent;
     private GdxApp mGdxApp;
@@ -19,14 +24,27 @@ public class TemplateController implements TemplateModule {
     private View mGdxView;
     private boolean mIsOpened;
 
-    public TemplateController(AndroidApplication application, ViewGroup viewParent) {
+    private static TemplateController instance;
+    private boolean isGdxCreated = false;
+    private TemplateScene mCurrTemplate;
+    private final TemplateSceneController mTemplateSceneController;
+
+    private TemplateController(AndroidApplication application, ViewGroup viewParent) {
         mAndroidApplication = application;
         mViewParent = viewParent;
         initGdx();
+        mTemplateSceneController = TemplateSceneControllerImpl.getInstance();
+    }
+
+    public static TemplateController getInstance(AndroidApplication application, ViewGroup viewParent) {
+        if (instance == null) {
+            instance = new TemplateController(application,viewParent);
+        }
+        return instance;
     }
 
     private void initGdx() {
-        mGdxApp = new GdxApp();
+        mGdxApp = new GdxApp(this);
         mConfig = new AndroidApplicationConfiguration();
         mConfig.r = mConfig.g = mConfig.b = mConfig.a = 8;
         mConfig.hideStatusBar = false;
@@ -39,8 +57,11 @@ public class TemplateController implements TemplateModule {
     }
 
     @Override
-    public void open(TemplateScene tempItem) {
-        mGdxApp.setTemplate(tempItem);
+    public void open(TemplateScene scene) {
+        mCurrTemplate = scene;
+        if (isGdxCreated) {
+            mGdxApp.setTemplate(scene);
+        }
         mGdxView = mAndroidApplication.initializeForView(mGdxApp, mConfig);
         mViewParent.addView(mGdxView);
         mIsOpened = true;
@@ -67,7 +88,37 @@ public class TemplateController implements TemplateModule {
         return mGdxApp;
     }
 
+    @Override
+    public void saveTemplate() {
+
+    }
+
     public TemplateScene getSavedOrLastTemplate() {
-        return null;
+        TemplateScene test = new TemplateScene();
+        ElementGroup elements = new ElementGroup();
+        TemplateElement element = new TemplateElement();
+        element.setPath("test.png");
+        element.setX(100);
+        element.setY(100);
+        element.setScale(1.0f);
+        elements.add(element);
+        test.setElements(elements);
+        return test;
+    }
+
+    @Override
+    public void onGdxCreate() {
+        isGdxCreated = true;
+        if (mCurrTemplate != null) {
+            mGdxApp.setTemplate(mCurrTemplate);
+        }
+    }
+
+    public void next() {
+        mTemplateSceneController.goNext();
+    }
+
+    public void pre() {
+        mTemplateSceneController.goPre();
     }
 }

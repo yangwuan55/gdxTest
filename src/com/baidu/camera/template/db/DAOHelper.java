@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class DAOHelper<T> extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME = "template_db";
-    private static final int DATABASE_VERSON = 2;
+    private static final int DATABASE_VERSON = 3;
 
     private static ArrayList<Class> classes = new ArrayList<Class>();
 

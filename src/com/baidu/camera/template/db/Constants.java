@@ -30,10 +30,10 @@ public class Constants {
         public static final String ELEMENT_X = "element_x";
         public static final String ELEMENT_Y = "element_y";
         public static final String SCALE = "scale";
-        public static final String ANGLE = "angle";
+        public static final String ROTATION = "rotation";
         public static final String ALPHA = "alpha";
         public static final String Z_ODER = "Z_ODER";
-        public static final String UNKNOWN = "unknown";
+        public static final String UNKNOW = "unknow";
     }
 
 }

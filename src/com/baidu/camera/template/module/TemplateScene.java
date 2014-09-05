@@ -1,16 +1,17 @@
 package com.baidu.camera.template.module;
 
 import android.graphics.Bitmap;
-import com.baidu.camera.template.RenderAble;
-import com.baidu.camera.template.RenderAbleGroupAdapter;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.baidu.camera.template.gdx.RenderAble;
+import com.baidu.camera.template.gdx.RenderAbleGroupAdapter;
 import com.baidu.camera.template.db.Constants;
 import com.baidu.camera.template.db.SceneElementManager;
+import com.baidu.camera.template.gdx.TemplateGroup;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,16 +20,19 @@ import java.util.List;
 @DatabaseTable(tableName = Constants.TemplateSceneKeys.DATA_BASE_NAME)
 public class TemplateScene extends RenderAbleGroupAdapter{
 
+    public static final String TAG = "TemplateScene";
     @DatabaseField(generatedId = true,columnName = Constants.TemplateSceneKeys.ID)
     private int id = -1;
     
     @DatabaseField(columnName = Constants.TemplateSceneKeys.TITLE)
     private String title;
 
-    private ElimentGroup elements;
-
     @DatabaseField(columnName = Constants.TemplateSceneKeys.SCENE_TYPE)
     private String sceneType;
+
+    private ElementGroup elements;
+
+    private Group group;
 
     public Bitmap getBitmap() {
         return null;
@@ -42,7 +46,7 @@ public class TemplateScene extends RenderAbleGroupAdapter{
         this.id = id;
     }
 
-    public ElimentGroup getElements() {
+    public ElementGroup getElements() {
         try {
             if (elements == null) {
                 elements = SceneElementManager.getInstance().findElementByScene(this);
@@ -53,7 +57,7 @@ public class TemplateScene extends RenderAbleGroupAdapter{
         return elements;
     }
 
-    public void setElements(ElimentGroup elements) {
+    public void setElements(ElementGroup elements) {
         this.elements = elements;
     }
 
@@ -83,11 +87,28 @@ public class TemplateScene extends RenderAbleGroupAdapter{
                 '}';
     }
 
+    public Group getGroup() {
+        if (group == null) {
+            group = new TemplateGroup();
+            ElementGroup tempelements = getElements();
+            for (TemplateElement tempelement : tempelements) {
+                group.addActor(tempelement.getActor());
+            }
+        }
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     @Override
     public List<RenderAble> getRenderAbles() {
         ArrayList<RenderAble> result = new ArrayList<RenderAble>();
-        if (elements != null) {
-            Collections.copy(result,elements);
+        if (elements != null && elements.size() > 0) {
+            for (TemplateElement element : elements) {
+                result.add(element);
+            }
         }
         return result;
     }

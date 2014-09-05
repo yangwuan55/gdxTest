@@ -19,4 +19,6 @@ public interface TemplateModule {
     boolean onTouchEvent(MotionEvent event);
 
     ApplicationAdapter getApplicationAdapter();
+
+    void saveTemplate();
 }

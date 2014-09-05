@@ -1,7 +1,9 @@
 package com.baidu.camera.template.module;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.baidu.camera.template.RenderAble;
+import com.baidu.camera.template.gdx.ActorManager;
+import com.baidu.camera.template.gdx.ElementActor;
+import com.baidu.camera.template.gdx.RenderAble;
 import com.baidu.camera.template.db.Constants;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -10,10 +12,10 @@ import com.j256.ormlite.table.DatabaseTable;
  * Created by yangmengrong on 14-8-27.
  */
 @DatabaseTable(tableName = Constants.TemplateElementKeys.DATA_BASE_NAME)
-public class TemplateElement implements RenderAble{
+public class TemplateElement implements RenderAble,ElementActor.ActorChangeListener {
 
     public static final float DEFULT_SCALE = 1.0f;
-    public static final float DEFULT_ANGLE = 0f;
+    public static final float DEFULT_ROTATION = 0f;
     public static final float DEFULT_ALPHA = 1.0f;
     @DatabaseField(generatedId = true,columnName = Constants.TemplateElementKeys.ID)
     private int id;
@@ -36,7 +38,7 @@ public class TemplateElement implements RenderAble{
 
     private float scale = DEFULT_SCALE;
 
-    private float angle = DEFULT_ANGLE;
+    private float rotation = DEFULT_ROTATION;
 
     private float alpha = DEFULT_ALPHA;
 
@@ -47,7 +49,8 @@ public class TemplateElement implements RenderAble{
     private SceneElement sceneElement;
 
     private boolean isFirstGetScale = true;
-    private boolean isFirstGetAngle = true;
+    private boolean isFirstGetRotation = true;
+    private Actor mActor;
 
     public void updatePositon(int x,int y) {
         this.x = x;
@@ -114,21 +117,24 @@ public class TemplateElement implements RenderAble{
         this.scale = scale;
     }
 
-    public float getAngle() {
-        if (isFirstGetAngle && sceneElement != null) {
-            angle = sceneElement.getAngle();
-            isFirstGetAngle = false;
+    public float getRotation() {
+        if (isFirstGetRotation && sceneElement != null) {
+            rotation = sceneElement.getRotation();
+            isFirstGetRotation = false;
         }
-        return angle;
+        return rotation;
     }
 
     @Override
     public Actor getActor() {
-        return null;
+        if (mActor == null) {
+            mActor = ActorManager.getInstance().getActor(this);
+        }
+        return mActor;
     }
 
-    public void setAngle(float angle) {
-        this.angle = angle;
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
     }
 
     public int getzOder() {
@@ -164,9 +170,20 @@ public class TemplateElement implements RenderAble{
         setX(sceneElement.getElementX());
         setY(sceneElement.getElementY());
         setScale(sceneElement.getElementScale());
-        setAngle(sceneElement.getAngle());
+        setRotation(sceneElement.getRotation());
         setAlpha(sceneElement.getAlpha());
         setzOder(sceneElement.getzOder());
-        setUnKnow(sceneElement.getUnKnown());
+        setUnKnow(sceneElement.getUnKnow());
+    }
+
+    @Override
+    public void onActorTouchUp(TemplateElement element) {
+        setX(element.getX());
+        setY(element.getY());
+        setScale(element.getScale());
+        setRotation(element.getRotation());
+        setAlpha(element.getAlpha());
+        setzOder(element.getzOder());
+        setUnKnow(element.getUnKnow());
     }
 }

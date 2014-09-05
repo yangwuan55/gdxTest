@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.baidu.camera.template.db.SceneElementManager;
 import com.baidu.camera.template.db.TemplateElemeteManager;
 import com.baidu.camera.template.db.TemplateSceneManager;
-import com.baidu.camera.template.module.ElimentGroup;
+import com.baidu.camera.template.module.ElementGroup;
 import com.baidu.camera.template.module.SceneElement;
 import com.baidu.camera.template.module.TemplateElement;
 import com.baidu.camera.template.module.TemplateScene;
@@ -38,7 +38,7 @@ public class TestActivity extends Activity{
         try {
             List<TemplateScene> all = templateSceneDaoManager.findAll();
             TemplateScene scene = all.get(0);
-            ElimentGroup elements = scene.getElements();
+            ElementGroup elements = scene.getElements();
             TemplateElement element = new TemplateElement();
             element.setTitle("add----------");
             templateElemeteManager.add(element);
@@ -94,21 +94,29 @@ public class TestActivity extends Activity{
             TemplateElement templateElement = new TemplateElement();
             templateElement.setTitle("templateElement1");
             templateElement.setElementType("templateElement1");
+            templateElement.setPath("test.png");
+            templateElement.setY(10);
             templateElemeteManager.add(templateElement);
 
             TemplateElement templateElement2 = new TemplateElement();
             templateElement2.setTitle("templateElement2");
             templateElement2.setElementType("templateElement2");
+            templateElement2.setPath("test.png");
+            templateElement2.setY(20);
             templateElemeteManager.add(templateElement2);
 
             TemplateElement templateElement3 = new TemplateElement();
             templateElement3.setTitle("templateElement3");
             templateElement3.setElementType("templateElement3");
+            templateElement3.setPath("test.png");
+            templateElement3.setY(30);
             templateElemeteManager.add(templateElement3);
 
             TemplateElement templateElement4 = new TemplateElement();
             templateElement4.setTitle("templateElement4");
             templateElement4.setElementType("templateElement4");
+            templateElement4.setPath("test.png");
+            templateElement4.setY(40);
             templateElemeteManager.add(templateElement4);
 
             sceneElementManager.add(new SceneElement(t,templateElement));

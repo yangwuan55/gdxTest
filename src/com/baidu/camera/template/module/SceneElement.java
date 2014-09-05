@@ -29,8 +29,8 @@ public class SceneElement {
     @DatabaseField(columnName = Constants.SceneElementKeys.SCALE)
     private float elementScale;
 
-    @DatabaseField(columnName = Constants.SceneElementKeys.ANGLE)
-    private float angle;
+    @DatabaseField(columnName = Constants.SceneElementKeys.ROTATION)
+    private float rotation;
 
     @DatabaseField(columnName = Constants.SceneElementKeys.ALPHA)
     private float alpha;
@@ -38,8 +38,8 @@ public class SceneElement {
     @DatabaseField(columnName = Constants.SceneElementKeys.Z_ODER)
     private int zOder;
 
-    @DatabaseField(columnName = Constants.SceneElementKeys.UNKNOWN)
-    private String unKnown;
+    @DatabaseField(columnName = Constants.SceneElementKeys.UNKNOW)
+    private String unKnow;
 
     public SceneElement(){}
 
@@ -49,10 +49,10 @@ public class SceneElement {
         elementX = element.getX();
         elementY = element.getY();
         elementScale = element.getScale();
-        angle = element.getAngle();
+        rotation = element.getRotation();
         alpha = element.getAlpha();
         zOder = element.getzOder();
-        unKnown = element.getUnKnow();
+        unKnow = element.getUnKnow();
     }
 
     public int getId() {
@@ -104,12 +104,12 @@ public class SceneElement {
         this.elementScale = elementScale;
     }
 
-    public float getAngle() {
-        return angle;
+    public float getRotation() {
+        return rotation;
     }
 
-    public void setAngle(float angle) {
-        this.angle = angle;
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
     }
 
     public float getAlpha() {
@@ -128,11 +128,11 @@ public class SceneElement {
         this.zOder = zOder;
     }
 
-    public String getUnKnown() {
-        return unKnown;
+    public String getUnKnow() {
+        return unKnow;
     }
 
-    public void setUnKnown(String unKnown) {
-        this.unKnown = unKnown;
+    public void setUnKnow(String unKnow) {
+        this.unKnow = unKnow;
     }
 }
