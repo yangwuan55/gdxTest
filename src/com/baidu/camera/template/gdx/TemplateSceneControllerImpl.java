@@ -26,7 +26,7 @@ public class TemplateSceneControllerImpl extends GestureDetector implements Temp
     private static final int CURR = 1;
     private static final int NEXT = 2;
     private static final String TAG = "TemplateSceneController";
-    public static final int DURATION = 400;
+    public static final int DURATION = 500;
     private List<Group> mAllGroups = new ArrayList<Group>();
     private Group[] mCurrGroups = new Group[GROUP_SIZE];
     private int mCurrPosition;
@@ -34,6 +34,8 @@ public class TemplateSceneControllerImpl extends GestureDetector implements Temp
     private int mDownX;
     private boolean mCanMove;
     private int mTouchedDistance;
+    private ValueAnimator mTranslateAnimator;
+
     private TemplateSceneControllerImpl(GestureListener listener) {
         super(listener);
         TemplateGestureListener gestureListener = (TemplateGestureListener) listener;
@@ -200,6 +202,14 @@ public class TemplateSceneControllerImpl extends GestureDetector implements Temp
 
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
+        if (mTranslateAnimator != null && mTranslateAnimator.isRunning()) {
+            CameraApp.getInstance().getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    mTranslateAnimator.cancel();
+                }
+            });
+        }
         mDownX = x;
         mCanMove = false;
         return super.touchDown(x, y, pointer, button);
@@ -226,31 +236,40 @@ public class TemplateSceneControllerImpl extends GestureDetector implements Temp
         return false;
     }
 
-    public void onPageChange(final int centerIndex) {
+    public void onPageChange(final int centerIndex,final float flingSpeed) {
         CameraApp.getInstance().getHandler().post(new Runnable() {
             @Override
             public void run() {
-                ValueAnimator animator = new ValueAnimator();
+                mTranslateAnimator = new ValueAnimator();
                 long duration = (long) (DURATION*(Math.abs(mCurrGroups[centerIndex].getX())/CameraApp.sScreenWidth));
-                animator.setDuration(duration);
-                animator.setFloatValues(mCurrGroups[centerIndex].getX(), 0);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                mTranslateAnimator.setDuration(duration);
+                mTranslateAnimator.setFloatValues(mCurrGroups[centerIndex].getX(), 0);
+                mTranslateAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
                         float animatedValue = (Float) animation.getAnimatedValue();
                         updateItemPosition((int) animatedValue);
                     }
                 });
-                animator.setInterpolator(new DecelerateInterpolator());
-                animator.addListener(new AnimatorListenerAdapter() {
+                float speed = flingSpeed;
+                if (speed == -1) {
+                    speed = 1000;
+                }
+                Log.v(TAG,"speed = " + speed);
+                mTranslateAnimator.setInterpolator(new DecelerateInterpolator(speed / 1000));
+                mTranslateAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         updateAllPosition(centerIndex);
                     }
                 });
-                animator.start();
+                mTranslateAnimator.start();
             }
         });
+    }
+
+    public void onPageChange(final int centerIndex) {
+        onPageChange(centerIndex,-1);
     }
 
     public static class TemplateGestureListener implements GestureDetector.GestureListener {
@@ -283,14 +302,15 @@ public class TemplateSceneControllerImpl extends GestureDetector implements Temp
         public boolean fling(float v, float v2, int i) {
             if (Math.abs(v) > 2000) {
                 if (v > 0 && mController.hasPre()) {
-                    mController.onPageChange(PRE);
+                    mController.onPageChange(PRE,Math.abs(v));
                 } else if (v < 0 && mController.hasNext()){
-                    mController.onPageChange(NEXT);
+                    mController.onPageChange(NEXT,Math.abs(v));
                 } else {
-                    mController.onPageChange(CURR);
+                    mController.onPageChange(CURR,Math.abs(v));
                 }
+                return true;
             }
-            return true;
+            return false;
         }
 
         @Override
